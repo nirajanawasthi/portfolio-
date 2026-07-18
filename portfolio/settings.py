@@ -26,10 +26,21 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dev-key-only-local')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('RENDER') is None
 
-ALLOWED_HOSTS = []
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+
+# Render ko lagi
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
+# Vercel ko lagi (Yo line haru thapnus)
+VERCEL_URL = os.environ.get("VERCEL_URL")
+if VERCEL_URL:
+    ALLOWED_HOSTS.append(VERCEL_URL)
+    ALLOWED_HOSTS.append(
+        ".vercel.app"
+    )  # Yasle sabai vercel subdomains lai allow garchha
 
 
 # Application definition
@@ -127,9 +138,6 @@ MEDIA_ROOT = BASE_DIR / "media"
 STATIC_URL = 'static/'
 
 
-
-
-
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STORAGES = {
     "default": {
@@ -139,4 +147,3 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
-
