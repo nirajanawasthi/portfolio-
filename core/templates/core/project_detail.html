@@ -1,0 +1,37 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}{{ project.title }} | Nirajan Awasthi{% endblock %}
+
+{% block content %}
+<section class="project-detail">
+    <a href="{% url 'core:home' %}#projects" class="back-link">&larr; Back to Projects</a>
+    <h1>{{ project.title }}</h1>
+
+    {% if project.thumbnail %}
+    <img src="{{ project.thumbnail.url }}" alt="{{ project.title }}" class="project-detail-thumb">
+    {% endif %}
+
+    <div class="project-detail-body">
+        <p>{{ project.description }}</p>
+    </div>
+
+    <div class="project-tech">
+        <h3>Tech Stack</h3>
+        <div class="tech-chips">
+            {% for tech in project.tech_list %}
+            <span class="chip">{{ tech }}</span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="project-links">
+        {% if project.github_url %}
+        <a href="{{ project.github_url }}" target="_blank" class="btn-link">View on GitHub</a>
+        {% endif %}
+        {% if project.live_url %}
+        <a href="{{ project.live_url }}" target="_blank" class="btn-link btn-live">Live Demo</a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

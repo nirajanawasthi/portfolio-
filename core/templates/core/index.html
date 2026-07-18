@@ -1,0 +1,348 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<section id="home" style="background:linear-gradient(135deg,#0d1117 0%,#161b3d 50%,#1a1440 100%);border-radius:24px;margin:20px;padding:60px 50px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:30px;min-height:480px;position:relative;overflow:hidden;">
+    <div>
+        <p style="color:#14b8a6;font-size:0.9rem;margin-bottom:15px;">Welcome to my portfolio</p>
+        <h1 style="font-size:2.8rem;color:#e5e7eb;line-height:1.3;margin-bottom:20px;">Hello, my<br>name's <span style="color:#14b8a6;">{{ profile.name }}</span></h1>
+        <p style="color:#9ca3af;font-size:0.95rem;line-height:1.7;max-width:400px;margin-bottom:30px;">I'm a {{ profile.title }} based in Nepal. Currently building projects and looking for internship opportunities.</p>
+        <div style="display:flex;gap:15px;flex-wrap:wrap;">
+            {% if profile.resume %}<a href="{{ profile.resume.url }}" target="_blank" style="background:#14b8a6;color:#0d1117;text-decoration:none;padding:13px 28px;border-radius:30px;font-weight:bold;font-size:0.9rem;">Download CV</a>{% endif %}
+            <a href="#projects" style="border:1px solid #4f46e5;color:#e5e7eb;text-decoration:none;padding:13px 28px;border-radius:30px;font-size:0.9rem;">See my work &rarr;</a>
+        </div>
+    </div>
+    <div style="display:flex;justify-content:center;align-items:center;position:relative;height:400px;">
+        <div style="position:absolute;top:5px;left:20px;width:0;height:0;border-left:20px solid transparent;border-right:20px solid transparent;border-bottom:34px solid #14b8a6;opacity:0.85;z-index:1;"></div>
+        <div style="position:absolute;top:35%;right:-10px;width:14px;height:14px;background:#f59e0b;border-radius:50%;opacity:0.9;z-index:1;"></div>
+        <div style="position:absolute;width:320px;height:370px;border-radius:50px;background:radial-gradient(circle, rgba(20,184,166,0.35) 0%, rgba(79,70,229,0.2) 50%, transparent 75%);filter:blur(25px);z-index:1;"></div>
+        <div style="width:290px;height:340px;border-radius:40px;overflow:hidden;border:1px solid rgba(20,184,166,0.3);box-shadow:0 20px 50px rgba(0,0,0,0.5);position:relative;z-index:2;background:#161b22;">
+            {% if profile.profile_image %}
+            <img src="{{ profile.profile_image.url }}" alt="{{ profile.name }}" style="width:100%;height:100%;object-fit:cover;object-position:center 22%;transform:scaleX(-1);">
+            {% endif %}
+            <div style="position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(transparent, rgba(13,17,23,0.6));"></div>
+        </div>
+        <div style="position:absolute;bottom:10px;right:5px;width:44px;height:44px;background:#f59e0b;border-radius:50%;opacity:0.85;box-shadow:0 0 25px rgba(245,158,11,0.5);z-index:1;"></div>
+    </div>
+</section>
+
+<section class="about-section" id="about">
+    <h2 class="section-title">About Me</h2>
+    <p class="section-subtitle">who i am</p>
+    <div class="about-grid" style="grid-template-columns: 1fr; max-width: 800px;">
+        <div class="about-text" style="text-align: center;">
+            <div class="hero-bio">
+                {{ profile.bio|linebreaks }}
+            </div>
+            <div class="hero-links">
+                {% if profile.github %}<a href="{{ profile.github }}" target="_blank" class="hero-link">GitHub</a>{% endif %}
+                {% if profile.linkedin %}<a href="{{ profile.linkedin }}" target="_blank" class="hero-link">LinkedIn</a>{% endif %}
+                {% if profile.email %}<a href="mailto:{{ profile.email }}" class="hero-link">Email</a>{% endif %}
+                {% if profile.resume %}<a href="{{ profile.resume.url }}" target="_blank" class="hero-link hero-link-primary">Resume</a>{% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="services-section">
+    <h2 class="section-title">My Services</h2>
+    <p class="section-subtitle">what i provide</p>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="service-icon">&#128187;</div>
+            <h3>Backend Development</h3>
+            <p>Building robust server-side logic with Django, REST APIs, and clean, maintainable code architecture.</p>
+        </div>
+        <div class="service-card">
+            <div class="service-icon">&#128179;</div>
+            <h3>Payment Integration</h3>
+            <p>Implementing secure payment gateways like eSewa and Khalti with proper signature verification.</p>
+        </div>
+        <div class="service-card service-card-highlight">
+            <div class="service-icon">&#128202;</div>
+            <h3>Database Design</h3>
+            <p>Designing efficient database schemas and optimizing queries for scalable web applications.</p>
+        </div>
+    </div>
+</section>
+
+<section class="projects-section" id="projects">
+    <p class="projects-eyebrow">// things i've shipped</p>
+    <h2 class="projects-title"><span class="projects-prompt">$</span> ls ./projects<span class="projects-cursor"></span></h2>
+    <p class="projects-sub">Some of my recent work and side projects</p>
+
+    <div class="projects-grid">
+    {% for project in projects %}
+    <a href="{% url 'core:project_detail' project.slug %}" class="project-card">
+        <div class="project-card-titlebar">
+            <span class="project-dot r"></span><span class="project-dot y"></span><span class="project-dot g"></span>
+            <span class="project-card-path">{{ project.slug }}.md</span>
+        </div>
+        <div class="project-thumb" style="background:{% if project.thumbnail %}url('{{ project.thumbnail.url }}') center/cover{% else %}linear-gradient(135deg, rgba(99,102,241,0.35), rgba(45,212,191,0.35)){% endif %};">
+            {% if not project.thumbnail %}<span class="project-thumb-fallback">&#128187;</span>{% endif %}
+        </div>
+        <div class="project-body">
+            <h3 class="project-heading"><span class="project-heading-hash">##</span> {{ project.title }}</h3>
+            <p class="project-desc"><span class="project-comment-slash">//</span> {{ project.description|truncatewords:18 }}</p>
+            <div class="project-tags">
+                {% for tech in project.tech_list|slice:":4" %}
+                <span class="project-tag">{{ tech }}</span>
+                {% endfor %}
+            </div>
+            <span class="project-cta">$ open ./{{ project.slug }} &rarr;</span>
+        </div>
+    </a>
+    {% endfor %}
+    </div>
+</section>
+
+<style>
+    .projects-section{ font-family:'JetBrains Mono','Fira Code',Consolas,monospace; max-width:1200px; margin:0 auto; padding:70px 20px; }
+    .projects-eyebrow{ color:#2dd4bf; font-size:13px; letter-spacing:2px; text-transform:uppercase; margin:0 0 4px; text-align:center; }
+    .projects-title{ font-size:2.2rem; margin:0 0 12px; color:#e2e8f0; font-weight:700; text-align:center; }
+    .projects-prompt{ color:#f5a524; margin-right:6px; }
+    .projects-cursor{ display:inline-block; width:9px; height:22px; background:#2dd4bf; margin-left:6px; vertical-align:-3px; animation:projectsBlink 1.1s steps(1) infinite; }
+    @keyframes projectsBlink{ 50%{ opacity:0; } }
+    .projects-sub{ text-align:center; color:#5b6478; margin-bottom:50px; font-size:0.9rem; }
+
+    .projects-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px; }
+
+    .project-card{
+        text-decoration:none;
+        display:block;
+        background:#0f1420;
+        border:1px solid #1c2333;
+        border-radius:12px;
+        overflow:hidden;
+        transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    .project-card:hover{
+        transform:translateY(-4px);
+        border-color:#2dd4bf;
+        box-shadow:0 20px 50px -20px rgba(45,212,191,.35);
+    }
+
+    .project-card-titlebar{ display:flex; align-items:center; gap:6px; padding:9px 12px; background:#0c111c; border-bottom:1px solid #1c2333; }
+    .project-dot{ width:9px; height:9px; border-radius:50%; display:inline-block; }
+    .project-dot.r{ background:#f87171; } .project-dot.y{ background:#fbbf24; } .project-dot.g{ background:#34d399; }
+    .project-card-path{ margin-left:8px; font-size:11px; color:#5b6478; }
+
+    .project-thumb{ height:150px; display:flex; align-items:center; justify-content:center; }
+    .project-thumb-fallback{ font-size:2.2rem; }
+
+    .project-body{ padding:22px; }
+    .project-heading{ color:#e2e8f0; font-size:1.05rem; margin:0 0 10px; }
+    .project-heading-hash{ color:#6366f1; }
+    .project-desc{ color:#8b95a8; font-size:0.85rem; line-height:1.6; margin:0 0 16px; min-height:65px; }
+    .project-comment-slash{ color:#3f4a63; }
+
+    .project-tags{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
+    .project-tag{ background:rgba(45,212,191,0.08); color:#2dd4bf; border:1px solid rgba(45,212,191,0.3); padding:4px 10px; border-radius:5px; font-size:0.68rem; }
+
+    .project-cta{ display:block; color:#f5a524; font-size:0.8rem; font-weight:700; }
+</style>
+
+<section class="skills" id="skills">
+    <p class="skills-eyebrow">// what i build with</p>
+    <h2 class="skills-title"><span class="skills-prompt">$</span> skills.json<span class="skills-cursor"></span></h2>
+
+    <div class="skills-editor">
+        <div class="skills-titlebar">
+            <span class="skills-dot r"></span><span class="skills-dot y"></span><span class="skills-dot g"></span>
+            <span class="skills-path">~/portfolio/skills</span>
+        </div>
+
+        {% regroup skills by category as skill_groups %}
+
+        <div class="skills-tabs">
+            {% for group in skill_groups %}
+            <div class="skills-tab{% if forloop.first %} active{% endif %}" data-pane="pane-{{ group.grouper }}">
+                {{ group.grouper }}<span class="skills-ext">{% if group.grouper == "backend" %}.py{% elif group.grouper == "frontend" %}.css{% elif group.grouper == "database" %}.sql{% else %}.sh{% endif %}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% for group in skill_groups %}
+        <div class="skills-pane{% if forloop.first %} active{% endif %}" id="pane-{{ group.grouper }}">
+            {% for skill in group.list %}
+            <div class="skills-line">
+                <span class="skills-ln">{{ forloop.counter|stringformat:"02d" }}</span>
+                <span class="skills-code"><span class="skills-kw">import</span> <span class="skills-fn">{{ skill.name }}</span></span>
+                <span class="skills-meter">
+                    <span class="skills-bar-track"><span class="skills-bar-fill" style="width: {{ skill.proficiency }}%"></span></span>
+                    <span class="skills-pct">{{ skill.proficiency }}%</span>
+                </span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<style>
+    .skills{ font-family:'JetBrains Mono','Fira Code',Consolas,monospace; }
+    .skills-eyebrow{ color:#2dd4bf; font-size:13px; letter-spacing:2px; text-transform:uppercase; margin:0 0 4px; }
+    .skills-title{ font-size:32px; margin:0 0 28px; color:#e2e8f0; font-weight:700; }
+    .skills-prompt{ color:#f5a524; margin-right:6px; }
+    .skills-cursor{ display:inline-block; width:10px; height:26px; background:#2dd4bf; margin-left:6px; vertical-align:-4px; animation:skillsBlink 1.1s steps(1) infinite; }
+    @keyframes skillsBlink{ 50%{ opacity:0; } }
+
+    .skills-editor{ background:#0f1420; border:1px solid #1c2333; border-radius:10px; overflow:hidden; box-shadow:0 20px 60px -20px rgba(0,0,0,.6); max-width:920px; }
+    .skills-titlebar{ display:flex; align-items:center; gap:8px; padding:10px 14px; background:#0c111c; border-bottom:1px solid #1c2333; }
+    .skills-dot{ width:10px; height:10px; border-radius:50%; display:inline-block; }
+    .skills-dot.r{ background:#f87171; } .skills-dot.y{ background:#fbbf24; } .skills-dot.g{ background:#34d399; }
+    .skills-path{ margin-left:10px; font-size:12px; color:#5b6478; }
+
+    .skills-tabs{ display:flex; background:#0c111c; border-bottom:1px solid #1c2333; overflow-x:auto; }
+    .skills-tab{ padding:10px 18px; font-size:13px; color:#5b6478; cursor:pointer; border-right:1px solid #1c2333; white-space:nowrap; user-select:none; transition:color .15s ease; }
+    .skills-ext{ opacity:.6; }
+    .skills-tab.active{ color:#e2e8f0; background:#0a0e17; border-top:2px solid #2dd4bf; margin-top:-1px; }
+    .skills-tab:not(.active):hover{ color:#cbd5e1; }
+
+    .skills-pane{ display:none; padding:22px 26px 26px; }
+    .skills-pane.active{ display:block; }
+
+    .skills-line{ display:grid; grid-template-columns:28px 1fr auto; align-items:center; gap:14px; padding:9px 0; border-bottom:1px dashed rgba(255,255,255,.05); }
+    .skills-line:last-child{ border-bottom:none; }
+    .skills-ln{ color:#333c52; font-size:12px; text-align:right; }
+    .skills-code{ font-size:14px; color:#cbd5e1; }
+    .skills-kw{ color:#6366f1; }
+    .skills-fn{ color:#2dd4bf; }
+
+    .skills-meter{ display:flex; align-items:center; gap:8px; font-size:11px; color:#5b6478; }
+    .skills-bar-track{ width:70px; height:6px; background:#1c2333; border-radius:3px; overflow:hidden; }
+    .skills-bar-fill{ display:block; height:100%; background:repeating-linear-gradient(90deg,#f5a524 0 8px,#f5a524 8px,transparent 8px,transparent 10px), #f5a524; background-blend-mode:multiply; background-color:#2dd4bf; }
+    .skills-pct{ min-width:32px; }
+
+    @media (max-width:640px){
+        .skills-line{ grid-template-columns:20px 1fr; row-gap:6px; }
+        .skills-meter{ grid-column:2; justify-content:flex-start; }
+    }
+</style>
+
+<script>
+    document.querySelectorAll('.skills-tab').forEach(function(tab){
+        tab.addEventListener('click', function(){
+            document.querySelectorAll('.skills-tab').forEach(function(t){ t.classList.remove('active'); });
+            document.querySelectorAll('.skills-pane').forEach(function(p){ p.classList.remove('active'); });
+            tab.classList.add('active');
+            document.getElementById(tab.dataset.pane).classList.add('active');
+        });
+    });
+</script>
+
+<section class="contact" id="contact">
+    <p class="contact-eyebrow">// send a signal</p>
+    <h2 class="contact-title"><span class="contact-prompt">$</span> contact.send()<span class="contact-cursor"></span></h2>
+
+    <div class="contact-editor">
+        <div class="contact-titlebar">
+            <span class="contact-dot r"></span><span class="contact-dot y"></span><span class="contact-dot g"></span>
+            <span class="contact-path">POST /api/contact</span>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+            <div class="contact-response">
+                <span class="contact-status">200 OK</span> {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" class="contact-form-term">
+            {% csrf_token %}
+            <div class="contact-field">
+                <label class="contact-key" for="{{ form.name.id_for_label }}">"name":</label>
+                {{ form.name }}
+            </div>
+            <div class="contact-field">
+                <label class="contact-key" for="{{ form.email.id_for_label }}">"email":</label>
+                {{ form.email }}
+            </div>
+            <div class="contact-field contact-field-block">
+                <label class="contact-key" for="{{ form.message.id_for_label }}">"message":</label>
+                {{ form.message }}
+            </div>
+            <button type="submit" class="contact-submit">
+                <span class="contact-submit-prompt">$</span> send --now
+            </button>
+        </form>
+    </div>
+</section>
+
+<style>
+    .contact{ font-family:'JetBrains Mono','Fira Code',Consolas,monospace; }
+    .contact-eyebrow{ color:#2dd4bf; font-size:13px; letter-spacing:2px; text-transform:uppercase; margin:0 0 4px; }
+    .contact-title{ font-size:32px; margin:0 0 28px; color:#e2e8f0; font-weight:700; }
+    .contact-prompt{ color:#f5a524; margin-right:6px; }
+    .contact-cursor{ display:inline-block; width:10px; height:26px; background:#2dd4bf; margin-left:6px; vertical-align:-4px; animation:contactBlink 1.1s steps(1) infinite; }
+    @keyframes contactBlink{ 50%{ opacity:0; } }
+
+    .contact-editor{ background:#0f1420; border:1px solid #1c2333; border-radius:10px; overflow:hidden; box-shadow:0 20px 60px -20px rgba(0,0,0,.6); max-width:640px; }
+    .contact-titlebar{ display:flex; align-items:center; gap:8px; padding:10px 14px; background:#0c111c; border-bottom:1px solid #1c2333; }
+    .contact-dot{ width:10px; height:10px; border-radius:50%; display:inline-block; }
+    .contact-dot.r{ background:#f87171; } .contact-dot.y{ background:#fbbf24; } .contact-dot.g{ background:#34d399; }
+    .contact-path{ margin-left:10px; font-size:12px; color:#5b6478; }
+
+    .contact-response{ margin:16px 26px 0; padding:10px 14px; background:rgba(45,212,191,.08); border:1px solid rgba(45,212,191,.3); border-radius:6px; font-size:13px; color:#2dd4bf; }
+    .contact-status{ color:#34d399; font-weight:700; margin-right:8px; }
+
+    .contact-form-term{ padding:22px 26px 26px; display:flex; flex-direction:column; gap:16px; }
+    .contact-field{ display:flex; align-items:center; gap:12px; }
+    .contact-field-block{ align-items:flex-start; }
+    .contact-key{ color:#6366f1; font-size:13px; min-width:78px; flex-shrink:0; padding-top:0; }
+    .contact-field-block .contact-key{ padding-top:10px; }
+
+    .contact-form-term input[type=text],
+    .contact-form-term input[type=email],
+    .contact-form-term textarea{
+        background:#0a0e17;
+        border:1px solid #1c2333;
+        color:#cbd5e1;
+        font-family:inherit;
+        font-size:14px;
+        padding:10px 12px;
+        border-radius:6px;
+        width:100%;
+        outline:none;
+        transition:border-color .15s ease;
+    }
+    .contact-form-term textarea{ min-height:110px; resize:vertical; }
+    .contact-form-term input:focus,
+    .contact-form-term textarea:focus{ border-color:#2dd4bf; }
+
+    .contact-submit{
+        margin-top:4px;
+        align-self:flex-start;
+        background:#2dd4bf;
+        color:#0a0e17;
+        border:none;
+        border-radius:6px;
+        padding:12px 22px;
+        font-family:inherit;
+        font-size:14px;
+        font-weight:700;
+        cursor:pointer;
+        transition:background .15s ease, transform .1s ease;
+    }
+    .contact-submit:hover{ background:#f5a524; }
+    .contact-submit:active{ transform:scale(.97); }
+    .contact-submit-prompt{ opacity:.6; margin-right:6px; }
+
+    @media (max-width:560px){
+        .contact-field{ flex-direction:column; align-items:flex-start; gap:6px; }
+        .contact-key{ min-width:auto; }
+    }
+</style>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+

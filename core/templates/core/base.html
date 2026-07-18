@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Nirajan Awasthi | Portfolio{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}?v=6">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">NA</a>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#projects">Projects</a>
+                <a href="#skills">Skills</a>
+                <a href="#contact">Contact</a>
+                <a href="{% url 'core:blog_list' %}">Blog</a>
+            </div>
+        </div>
+    </nav>
+    <div class="portfolio-wrapper">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <script src="{% static 'core/js/main.js' %}"></script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,28 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Blog | Nirajan Awasthi{% endblock %}
+
+{% block content %}
+<section class="blog-header">
+    <h1>Blog</h1>
+    <p>Thoughts on Django, backend development, and things I'm building.</p>
+</section>
+
+<section class="blog-list">
+    {% for post in posts %}
+    <a href="{% url 'core:blog_detail' post.slug %}" class="blog-card">
+        {% if post.cover_image %}
+        <img src="{{ post.cover_image.url }}" alt="{{ post.title }}" class="blog-cover">
+        {% endif %}
+        <div class="blog-card-content">
+            <h3>{{ post.title }}</h3>
+            <p class="blog-date">{{ post.created_at|date:"M d, Y" }}</p>
+            <p>{{ post.excerpt }}</p>
+        </div>
+    </a>
+    {% empty %}
+    <p>No blog posts yet. Check back soon!</p>
+    {% endfor %}
+</section>
+{% endblock %}

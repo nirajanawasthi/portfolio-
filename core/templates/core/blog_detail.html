@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} | Nirajan Awasthi{% endblock %}
+
+{% block content %}
+<section class="blog-detail">
+    <a href="{% url 'core:blog_list' %}" class="back-link">&larr; Back to Blog</a>
+    <h1>{{ post.title }}</h1>
+    <p class="blog-date">{{ post.created_at|date:"M d, Y" }}</p>
+    {% if post.cover_image %}
+    <img src="{{ post.cover_image.url }}" alt="{{ post.title }}" class="blog-detail-cover">
+    {% endif %}
+    <div class="blog-content">
+        {{ post.content|linebreaks }}
+    </div>
+</section>
+{% endblock %}
