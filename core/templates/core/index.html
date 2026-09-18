@@ -2,49 +2,293 @@
 {% load static %}
 
 {% block content %}
-<section id="home" style="background:linear-gradient(135deg,#0d1117 0%,#161b3d 50%,#1a1440 100%);border-radius:24px;margin:20px;padding:60px 50px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:30px;min-height:480px;position:relative;overflow:hidden;">
-    <div>
-        <p style="color:#14b8a6;font-size:0.9rem;margin-bottom:15px;">Welcome to my portfolio</p>
-        <h1 style="font-size:2.8rem;color:#e5e7eb;line-height:1.3;margin-bottom:20px;">Hello, my<br>name's <span style="color:#14b8a6;">{{ profile.name }}</span></h1>
-        <p style="color:#9ca3af;font-size:0.95rem;line-height:1.7;max-width:400px;margin-bottom:30px;">I'm a {{ profile.title }} based in Nepal. Currently building projects and looking for internship opportunities.</p>
-        <div style="display:flex;gap:15px;flex-wrap:wrap;">
-            {% if profile.resume %}<a href="{{ profile.resume.url }}" target="_blank" style="background:#14b8a6;color:#0d1117;text-decoration:none;padding:13px 28px;border-radius:30px;font-weight:bold;font-size:0.9rem;">Download CV</a>{% endif %}
-            <a href="#projects" style="border:1px solid #4f46e5;color:#e5e7eb;text-decoration:none;padding:13px 28px;border-radius:30px;font-size:0.9rem;">See my work &rarr;</a>
+<section class="hero" id="home">
+    <div class="hero-left">
+        <p class="hero-eyebrow">// building backends. ready to ship.</p>
+        <h1 class="hero-heading">Hi, I'm<br><span class="hero-name">{{ profile.name }}</span></h1>
+        <p class="hero-desc">I'm a {{ profile.title }} based in Nepal — turning messy requirements into clean REST APIs, with real payment gateways and real databases in mind.</p>
+
+        <div class="hero-actions">
+            {% if profile.resume %}<a href="{{ profile.resume.url }}" target="_blank" class="hero-btn hero-btn-primary">Download CV</a>{% endif %}
+            <a href="#projects" class="hero-btn hero-btn-outline">See my work &rarr;</a>
+        </div>
+
+        <div class="hero-terminal">
+            <span class="hero-terminal-prompt">$</span>
+            <span id="hero-typed"></span><span class="hero-terminal-cursor">&#9612;</span>
+        </div>
+
+        <div class="hero-links">
+            {% if profile.github %}<a href="{{ profile.github }}" target="_blank" class="hero-link">GitHub</a>{% endif %}
+            {% if profile.linkedin %}<a href="{{ profile.linkedin }}" target="_blank" class="hero-link">LinkedIn</a>{% endif %}
+            {% if profile.email %}<a href="mailto:{{ profile.email }}" class="hero-link">Email</a>{% endif %}
         </div>
     </div>
-    <div style="display:flex;justify-content:center;align-items:center;position:relative;height:400px;">
-        <div style="position:absolute;top:5px;left:20px;width:0;height:0;border-left:20px solid transparent;border-right:20px solid transparent;border-bottom:34px solid #14b8a6;opacity:0.85;z-index:1;"></div>
-        <div style="position:absolute;top:35%;right:-10px;width:14px;height:14px;background:#f59e0b;border-radius:50%;opacity:0.9;z-index:1;"></div>
-        <div style="position:absolute;width:320px;height:370px;border-radius:50px;background:radial-gradient(circle, rgba(20,184,166,0.35) 0%, rgba(79,70,229,0.2) 50%, transparent 75%);filter:blur(25px);z-index:1;"></div>
-        <div style="width:290px;height:340px;border-radius:40px;overflow:hidden;border:1px solid rgba(20,184,166,0.3);box-shadow:0 20px 50px rgba(0,0,0,0.5);position:relative;z-index:2;background:#161b22;">
+
+    <div class="hero-right">
+        <div class="hero-photo-glow"></div>
+        <div class="hero-orbit-ring"></div>
+        <div class="hero-photo-frame">
             {% if profile.profile_image %}
-            <img src="{{ profile.profile_image.url }}" alt="{{ profile.name }}" style="width:100%;height:100%;object-fit:cover;object-position:center 22%;transform:scaleX(-1);">
+            <img src="{{ profile.profile_image.url }}" alt="{{ profile.name }}" class="hero-photo">
             {% endif %}
-            <div style="position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(transparent, rgba(13,17,23,0.6));"></div>
         </div>
-        <div style="position:absolute;bottom:10px;right:5px;width:44px;height:44px;background:#f59e0b;border-radius:50%;opacity:0.85;box-shadow:0 0 25px rgba(245,158,11,0.5);z-index:1;"></div>
+        <div class="hero-orbit">
+            <div class="hero-orbit-badge b1"><span class="badge-pill">Django</span></div>
+            <div class="hero-orbit-badge b2"><span class="badge-pill badge-amber">DRF</span></div>
+            <div class="hero-orbit-badge b3"><span class="badge-pill">PostgreSQL</span></div>
+            <div class="hero-orbit-badge b4"><span class="badge-pill badge-purple">Docker</span></div>
+        </div>
     </div>
 </section>
 
-<section class="about-section" id="about">
-    <h2 class="section-title">About Me</h2>
-    <p class="section-subtitle">who i am</p>
-    <div class="about-grid" style="grid-template-columns: 1fr; max-width: 800px;">
-        <div class="about-text" style="text-align: center;">
+<style>
+    .hero{
+        font-family:'JetBrains Mono','Fira Code',Consolas,monospace;
+        background:#0a0e17;
+        border:1px solid #1c2333;
+        border-radius:20px;
+        margin:20px;
+        padding:60px 50px;
+        display:grid;
+        grid-template-columns:1.1fr 0.9fr;
+        align-items:center;
+        gap:40px;
+        min-height:480px;
+        position:relative;
+        overflow:hidden;
+    }
+    .hero::before{
+        content:"";
+        position:absolute; inset:0;
+        background:
+            radial-gradient(ellipse 700px 400px at 0% 0%, rgba(45,212,191,0.08), transparent 60%),
+            radial-gradient(ellipse 500px 400px at 100% 100%, rgba(245,165,36,0.05), transparent 60%);
+        pointer-events:none;
+    }
+    .hero-left{ position:relative; z-index:1; }
+    .hero-eyebrow{ color:#2dd4bf; font-size:13px; letter-spacing:1.5px; text-transform:uppercase; margin:0 0 16px; }
+    .hero-heading{ font-family:'Sora',sans-serif; font-size:2.6rem; color:#e2e8f0; line-height:1.2; margin:0 0 18px; font-weight:700; }
+    .hero-name{ color:#2dd4bf; }
+    .hero-desc{ color:#8b95a8; font-size:0.98rem; line-height:1.7; max-width:440px; margin:0 0 28px; font-family:'Sora',sans-serif; }
+
+    .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:26px; }
+    .hero-btn{ text-decoration:none; padding:13px 26px; border-radius:8px; font-size:0.85rem; font-weight:600; transition:transform .15s ease, background .2s ease; }
+    .hero-btn:hover{ transform:translateY(-1px); }
+    .hero-btn-primary{ background:#2dd4bf; color:#0a0e17; }
+    .hero-btn-primary:hover{ background:#5eead4; }
+    .hero-btn-outline{ border:1px solid #1c2333; color:#e2e8f0; }
+    .hero-btn-outline:hover{ border-color:#2dd4bf; color:#2dd4bf; }
+
+    .hero-terminal{
+        background:#0f1420; border:1px solid #1c2333; border-radius:8px;
+        padding:12px 16px; font-size:13px; color:#8b95a8; margin-bottom:22px;
+        max-width:480px; word-break:break-word;
+    }
+    .hero-terminal-prompt{ color:#f5a524; margin-right:8px; }
+    #hero-typed{ color:#cbd5e1; }
+    .hero-terminal-cursor{ color:#2dd4bf; animation:heroBlink 1s step-end infinite; margin-left:1px; }
+    @keyframes heroBlink{ 50%{ opacity:0; } }
+
+    .hero-links{ display:flex; gap:18px; }
+    .hero-link{ color:#5b6478; text-decoration:none; font-size:0.82rem; transition:color .15s ease; }
+    .hero-link:hover{ color:#2dd4bf; }
+
+    .hero-right{ position:relative; display:flex; align-items:center; justify-content:center; height:380px; z-index:1; }
+    .hero-photo-glow{
+        position:absolute; width:300px; height:300px; border-radius:50%;
+        background:radial-gradient(circle, rgba(45,212,191,0.28) 0%, rgba(245,165,36,0.12) 55%, transparent 75%);
+        filter:blur(30px);
+    }
+    .hero-orbit-ring{
+        position:absolute; width:340px; height:340px; border-radius:50%;
+        border:1px dashed rgba(45,212,191,0.25);
+    }
+    .hero-photo-frame{
+        width:260px; height:260px; border-radius:50%; overflow:hidden;
+        border:2px solid rgba(45,212,191,0.4);
+        box-shadow:0 25px 60px rgba(0,0,0,0.5);
+        position:relative; z-index:2; background:#0f1420;
+    }
+    .hero-photo{ width:100%; height:100%; object-fit:cover; object-position:center 20%; }
+
+    /* Orbiting skill badges */
+    .hero-orbit{
+        position:absolute; top:50%; left:50%; width:0; height:0;
+        animation:heroOrbitSpin 24s linear infinite; z-index:3;
+    }
+    .hero-orbit-badge{ position:absolute; top:0; left:0; transform-origin:0 0; }
+    .hero-orbit-badge.b1{ transform:rotate(0deg) translateX(195px); }
+    .hero-orbit-badge.b2{ transform:rotate(90deg) translateX(195px); }
+    .hero-orbit-badge.b3{ transform:rotate(180deg) translateX(195px); }
+    .hero-orbit-badge.b4{ transform:rotate(270deg) translateX(195px); }
+
+    .badge-pill{
+        display:inline-flex; align-items:center; gap:7px; white-space:nowrap;
+        font-size:11.5px; padding:7px 13px; border-radius:20px;
+        background:#0f1420; border:1px solid #1c2333; color:#cbd5e1;
+        box-shadow:0 10px 25px rgba(0,0,0,0.4);
+    }
+    .badge-pill::before{ content:""; width:7px; height:7px; border-radius:50%; background:#2dd4bf; flex-shrink:0; }
+    .badge-pill.badge-amber::before{ background:#f5a524; }
+    .badge-pill.badge-purple::before{ background:#818cf8; }
+
+    .b1 .badge-pill{ animation:orbitCounter1 24s linear infinite; }
+    .b2 .badge-pill{ animation:orbitCounter2 24s linear infinite; }
+    .b3 .badge-pill{ animation:orbitCounter3 24s linear infinite; }
+    .b4 .badge-pill{ animation:orbitCounter4 24s linear infinite; }
+
+    @keyframes heroOrbitSpin{ from{ transform:rotate(0deg); } to{ transform:rotate(360deg); } }
+    @keyframes orbitCounter1{ from{ transform:rotate(0deg); } to{ transform:rotate(-360deg); } }
+    @keyframes orbitCounter2{ from{ transform:rotate(-90deg); } to{ transform:rotate(-450deg); } }
+    @keyframes orbitCounter3{ from{ transform:rotate(-180deg); } to{ transform:rotate(-540deg); } }
+    @keyframes orbitCounter4{ from{ transform:rotate(-270deg); } to{ transform:rotate(-630deg); } }
+
+    @media (max-width: 880px){
+        .hero{ grid-template-columns:1fr; padding:40px 24px; margin:12px; }
+        .hero-right{ height:300px; margin-top:20px; }
+        .hero-heading{ font-size:2rem; }
+        .hero-orbit-badge{ display:none; }
+        .hero-orbit-ring{ width:260px; height:260px; }
+        .hero-photo-frame{ width:200px; height:200px; }
+        .hero-photo-glow{ width:230px; height:230px; }
+    }
+</style>
+
+<section class="about-section reveal" id="about">
+    <p class="about-eyebrow">// who i am</p>
+    <h2 class="about-heading">Backend Developer &amp; <span class="about-accent">Problem Solver</span></h2>
+
+    <div class="about-layout">
+        <div class="about-photo-col">
+            <div class="about-photo-frame">
+                {% if profile.profile_image %}
+                <img src="{{ profile.profile_image.url }}" alt="{{ profile.name }}" class="about-photo">
+                {% endif %}
+            </div>
+            <div class="about-photo-badge">
+                <span class="about-badge-num">{{ projects|length }}+</span>
+                <span class="about-badge-label">Projects<br>Shipped</span>
+            </div>
+        </div>
+
+        <div class="about-text-col">
             <div class="hero-bio">
                 {{ profile.bio|linebreaks }}
             </div>
-            <div class="hero-links">
-                {% if profile.github %}<a href="{{ profile.github }}" target="_blank" class="hero-link">GitHub</a>{% endif %}
-                {% if profile.linkedin %}<a href="{{ profile.linkedin }}" target="_blank" class="hero-link">LinkedIn</a>{% endif %}
-                {% if profile.email %}<a href="mailto:{{ profile.email }}" class="hero-link">Email</a>{% endif %}
-                {% if profile.resume %}<a href="{{ profile.resume.url }}" target="_blank" class="hero-link hero-link-primary">Resume</a>{% endif %}
+
+            <div class="about-stats">
+                <div class="about-stat">
+                    <span class="about-stat-num">{{ projects|length }}+</span>
+                    <span class="about-stat-label">Projects</span>
+                </div>
+                <div class="about-stat">
+                    <span class="about-stat-num">{{ skills|length }}+</span>
+                    <span class="about-stat-label">Technologies</span>
+                </div>
+                <div class="about-stat">
+                    <span class="about-stat-num">100%</span>
+                    <span class="about-stat-label">Backend Focus</span>
+                </div>
+            </div>
+
+            <p class="about-journey-label">// developer journey</p>
+            <div class="about-timeline">
+                <div class="about-t-item">
+                    <span class="about-t-year">2023</span>
+                    <div>
+                        <h4>Started with Python &amp; Django</h4>
+                        <p>Picked up backend fundamentals — models, views, templates.</p>
+                    </div>
+                </div>
+                <div class="about-t-item">
+                    <span class="about-t-year">2024</span>
+                    <div>
+                        <h4>Went deeper into REST APIs</h4>
+                        <p>DRF, JWT auth, and eSewa / Khalti payment gateway integration.</p>
+                    </div>
+                </div>
+                <div class="about-t-item">
+                    <span class="about-t-year">2025</span>
+                    <div>
+                        <h4>Shipped HostelHub &amp; TutorHub</h4>
+                        <p>Multi-role platforms, end-to-end — schema design to production.</p>
+                    </div>
+                </div>
+                <div class="about-t-item">
+                    <span class="about-t-year">2026</span>
+                    <div>
+                        <h4>Looking for an internship</h4>
+                        <p>Final year of CSIT — ready to join a real engineering team.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-links-row">
+                {% if profile.github %}<a href="{{ profile.github }}" target="_blank" class="hero-link-pill">GitHub</a>{% endif %}
+                {% if profile.linkedin %}<a href="{{ profile.linkedin }}" target="_blank" class="hero-link-pill">LinkedIn</a>{% endif %}
+                {% if profile.email %}<a href="mailto:{{ profile.email }}" class="hero-link-pill">Email</a>{% endif %}
+                {% if profile.resume %}<a href="{{ profile.resume.url }}" target="_blank" class="hero-link-pill hero-link-pill-primary">Resume</a>{% endif %}
             </div>
         </div>
     </div>
 </section>
 
-<section class="services-section">
+<style>
+    .about-section{ font-family:'JetBrains Mono','Fira Code',Consolas,monospace; max-width:1200px; margin:0 auto; padding:80px 20px 20px; }
+    .about-eyebrow{ color:#2dd4bf; font-size:13px; letter-spacing:2px; text-transform:uppercase; margin:0 0 8px; text-align:center; }
+    .about-heading{ font-family:'Sora',sans-serif; font-size:2rem; color:#e2e8f0; font-weight:700; text-align:center; margin:0 0 50px; }
+    .about-accent{ color:#2dd4bf; }
+
+    .about-layout{ display:grid; grid-template-columns:0.85fr 1.15fr; gap:50px; align-items:start; }
+
+    .about-photo-col{ position:relative; }
+    .about-photo-frame{
+        border-radius:16px; overflow:hidden; border:1px solid #1c2333;
+        box-shadow:0 25px 60px rgba(0,0,0,0.5); aspect-ratio:3/4; background:#0f1420;
+    }
+    .about-photo{ width:100%; height:100%; object-fit:cover; }
+    .about-photo-badge{
+        position:absolute; bottom:16px; right:-14px;
+        background:#0f1420; border:1px solid #2dd4bf; border-radius:10px;
+        padding:12px 16px; display:flex; flex-direction:column; align-items:center;
+        box-shadow:0 15px 35px rgba(0,0,0,0.5);
+    }
+    .about-badge-num{ color:#2dd4bf; font-size:1.4rem; font-weight:700; line-height:1; }
+    .about-badge-label{ color:#8b95a8; font-size:10px; text-align:center; margin-top:4px; line-height:1.3; }
+
+    .hero-bio{ color:#8b95a8; font-size:0.95rem; line-height:1.8; margin-bottom:26px; font-family:'Sora',sans-serif; }
+    .hero-bio p{ margin:0 0 14px; }
+
+    .about-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:34px; }
+    .about-stat{
+        background:#0f1420; border:1px solid #1c2333; border-radius:10px;
+        padding:16px 10px; text-align:center;
+    }
+    .about-stat-num{ display:block; color:#2dd4bf; font-size:1.5rem; font-weight:700; }
+    .about-stat-label{ display:block; color:#5b6478; font-size:11px; margin-top:4px; text-transform:uppercase; letter-spacing:.5px; }
+
+    .about-journey-label{ color:#2dd4bf; font-size:13px; letter-spacing:1.5px; text-transform:uppercase; margin:0 0 18px; }
+
+    .about-timeline{ position:relative; padding-left:24px; margin-bottom:32px; }
+    .about-timeline::before{ content:""; position:absolute; left:4px; top:6px; bottom:6px; width:1px; background:#1c2333; }
+    .about-t-item{ position:relative; padding-bottom:24px; }
+    .about-t-item:last-child{ padding-bottom:0; }
+    .about-t-item::before{
+        content:""; position:absolute; left:-24px; top:4px; width:9px; height:9px; border-radius:50%;
+        background:#070b09; border:2px solid #2dd4bf;
+    }
+    .about-t-year{ display:block; color:#f5a524; font-size:12px; margin-bottom:4px; }
+    .about-t-item h4{ font-family:'Sora',sans-serif; color:#e2e8f0; font-size:0.95rem; margin:0 0 4px; }
+    .about-t-item p{ color:#8b95a8; font-size:0.85rem; font-family:'Sora',sans-serif; margin:0; line-height:1.6; }
+
+    @media (max-width:880px){
+        .about-layout{ grid-template-columns:1fr; }
+        .about-photo-col{ max-width:280px; margin:0 auto 40px; }
+    }
+</style>
+
+<section class="services-section reveal">
     <h2 class="section-title">My Services</h2>
     <p class="section-subtitle">what i provide</p>
     <div class="services-grid">
@@ -66,7 +310,7 @@
     </div>
 </section>
 
-<section class="projects-section" id="projects">
+<section class="projects-section reveal" id="projects">
     <p class="projects-eyebrow">// things i've shipped</p>
     <h2 class="projects-title"><span class="projects-prompt">$</span> ls ./projects<span class="projects-cursor"></span></h2>
     <p class="projects-sub">Some of my recent work and side projects</p>
@@ -142,7 +386,7 @@
     .project-cta{ display:block; color:#f5a524; font-size:0.8rem; font-weight:700; }
 </style>
 
-<section class="skills" id="skills">
+<section class="skills reveal" id="skills">
     <p class="skills-eyebrow">// what i build with</p>
     <h2 class="skills-title"><span class="skills-prompt">$</span> skills.json<span class="skills-cursor"></span></h2>
 
@@ -231,7 +475,7 @@
     });
 </script>
 
-<section class="contact" id="contact">
+<section class="contact reveal" id="contact">
     <p class="contact-eyebrow">// send a signal</p>
     <h2 class="contact-title"><span class="contact-prompt">$</span> contact.send()<span class="contact-cursor"></span></h2>
 
@@ -335,14 +579,4 @@
     }
 </style>
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
 
